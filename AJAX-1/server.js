@@ -24,7 +24,11 @@ var server = http.createServer(function (request, response) {
     if (path === '/index.html') {
         response.statusCode = 200
         response.setHeader('Content-Type', 'text/html;charset=utf-8')
-        const string = fs.readFileSync('public/index.html')
+        let string = fs.readFileSync('public/index.html').toString()
+        const page1 = fs.readFileSync('db/page1.json').toString()
+        const array = JSON.parse(page1)
+        const result = array.map(item => `<li>${item.id}</li>`).join('')
+        string = string.replace('{{page1}}', `<ul id="xxx">${result}</ul>`)
         response.write(string)
         response.end()
     } else if (path === '/style.css') {
@@ -60,6 +64,18 @@ var server = http.createServer(function (request, response) {
         response.statusCode = 200
         response.setHeader('Content-Type', 'text/json;charset=utf-8')
         response.write(fs.readFileSync('public/5.json'));
+
+        response.end()
+    } else if (path === '/page2') {
+        response.statusCode = 200
+        response.setHeader('Content-Type', 'text/json;charset=utf-8')
+        response.write(fs.readFileSync('db/page2.json'));
+
+        response.end()
+    } else if (path === '/page3') {
+        response.statusCode = 200
+        response.setHeader('Content-Type', 'text/json;charset=utf-8')
+        response.write(fs.readFileSync('db/page3.json'));
 
         response.end()
     }
